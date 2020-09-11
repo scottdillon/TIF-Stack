@@ -1,4 +1,4 @@
-# Metrics
+# Influxdb / Telegraf / Grafana metrics
 
 This repo is a template you can apply to projects where you need the following parts:
 
