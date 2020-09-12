@@ -1,8 +1,12 @@
 version: "3"
 services:
-    web:
-        container_name: python_metrics
+    metricsweb:
+        container_name: metricsweb
         build: .
+        ports:
+        - 5000:5000
+        depends_on:
+        - influxdb
     grafana:
         container_name: grafana
         image: grafana/grafana:latest
@@ -22,6 +26,8 @@ services:
         image: telegraf
         container_name: telegraf
         restart: always
+        depends_on:
+        - influxdb
         environment:
             HOST_PROC: /rootfs/proc
             HOST_SYS: /rootfs/sys
