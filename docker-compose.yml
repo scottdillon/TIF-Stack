@@ -5,8 +5,13 @@ services:
         image: grafana/grafana:7.5.3
         ports:
         - 3000:3000
+        env_file:
+          - './grafana/env.grafana'
         volumes:
             - grafana-data:/var/lib/grafana
+            - ./grafana/logs:/var/log/grafana
+            - ./grafana/plugins:/var/lib/grafana/plugins
+            - ./grafana/grafana.ini:/etc/grafana/grafana.ini
 
     influxdb:
         container_name: influxdb
