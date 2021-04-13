@@ -47,12 +47,9 @@ function up {
 
 function influx_setup {
   # Sets up influxdb.
-  until cmd influx ping; do
-  >&2 echo "InfluxDB not ready yet - sleeping"
-  sleep 1
-  done
+  wait_on_influx
 
-  _dc influxdb influx setup \
+  cmd influx setup \
     -u "$INFLUX_USERNAME" \
     -p "$INFLUX_PASSWORD" \
     -o "$INFLUX_ORG" \
@@ -67,6 +64,14 @@ function influx_setup {
 
   # Create read token
   grafana_token="$(create_read_token)"
+  sed -i "" "s/GRAFANA_READ_TOKEN=.*/GRAFANA_READ_TOKEN=$grafana_token/" "$PWD/grafana/env.grafana"
+}
+
+function wait_on_influx {
+  until cmd influx ping; do
+  >&2 echo "InfluxDB not ready yet - sleeping"
+  sleep 1
+  done
 }
 
 function get_influxdb_bucket {
@@ -91,7 +96,7 @@ function create_read_token {
     --read-orgs \
     --read-tasks \
     --read-telegrafs \
-    --read-user)"
+    --read-user | grep "$INFLUX_USERNAME" | awk '{print $2}')"
   echo "$token"
 }
 
