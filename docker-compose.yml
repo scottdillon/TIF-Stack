@@ -1,42 +1,68 @@
 version: "3"
 services:
-    metricsweb:
-        container_name: metricsweb
-        build: .
-        ports:
-        - 5000:5000
-        depends_on:
-        - influxdb
     grafana:
         container_name: grafana
-        image: grafana/grafana:latest
+        image: grafana/grafana:7.5.3
         ports:
         - 3000:3000
         volumes:
-            - ./grafana/data:/var/lib/grafana
+            - grafana-data:/var/lib/grafana
+
     influxdb:
         container_name: influxdb
-        image: influxdb:latest
+        image: influxdb:2.0.4
         ports:
         - 8086:8086
         env_file:
-            - 'env.influxdb'
+            - './influxdb/env.influxdb'
         volumes:
-            - ./influxdb/data:/var/lib/influxdb
+            - type: "volume"
+              source: influxdb2-data
+              target: /root/.influxdbv2
+            - ./scripts/influx_startup.sh:/influx_startup.sh:ro
+
     telegraf:
         container_name: telegraf
-        image: telegraf
-        container_name: telegraf
+        image: telegraf:1.18.0
         restart: always
         depends_on:
-        - influxdb
+          - influxdb
+        profiles:
+          - telegraf
+        env_file:
+            - './telegraf/env.telegraf'
         environment:
             HOST_PROC: /rootfs/proc
             HOST_SYS: /rootfs/sys
             HOST_ETC: /rootfs/etc
         volumes:
-            - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
+            - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
             - /var/run/docker.sock:/var/run/docker.sock:ro
             - /sys:/rootfs/sys:ro
             - /proc:/rootfs/proc:ro
             - /etc:/rootfs/etc:ro
+
+    caddy:
+        image: caddy:2.3.0-alpine
+        restart: unless-stopped
+        ports:
+          - "80:80"
+          - "443:443"
+        volumes:
+          - $PWD/caddy/Caddyfile:/etc/caddy/Caddyfile
+          - metrics-caddy-data:/data
+          - metrics-caddy-config:/config
+
+volumes:
+  influxdb2-data:
+    external: true
+    name: influxdb2-data
+  grafana-data:
+    external: true
+    name: grafana-data
+  metrics-caddy-data:
+    external: true
+    name: metrics-caddy-data
+  metrics-caddy-config:
+    external: true
+    name: metrics-caddy-config
