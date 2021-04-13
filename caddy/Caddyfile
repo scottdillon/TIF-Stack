@@ -1,0 +1,18 @@
+metrics.hexatech.lan {
+    tls internal
+    log {
+        output file /var/log/caddy/ctrl_access.log
+        format single_field common_log
+    }
+    reverse_proxy grafana:3000
+}
+
+
+influx.hexatech.lan {
+    tls internal
+    log {
+        output file /var/log/caddy/ctrl_access.log
+        format single_field common_log
+    }
+    reverse_proxy influxdb:8086
+}
