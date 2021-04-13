@@ -2,3 +2,4 @@
 chronograf
 influxdb
 venv
+telegraf/telegraf_configs
