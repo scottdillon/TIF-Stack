@@ -64,12 +64,12 @@ function influx_setup() {
   # Create write token
   bucket_id="$(get_influxdb_bucket)"
   telegraf_token="$(create_write_token $bucket_id)"
-  token_placeholder="INFLUX_TOKEN=.*"
-  sed -i "" "s/INFLUX_TOKEN=.*/INFLUX_TOKEN=$telegraf_token/" "$PWD/telegraf/env.telegraf"
+  token_placeholder="TELEGRAF_WRITE_TOKEN=.*"
+  sed -i "" "s/TELEGRAF_WRITE_TOKEN=.*/TELEGRAF_WRITE_TOKEN=$telegraf_token/" "$PWD/telegraf/telegraf.env"
 
   # Create read token
   grafana_token="$(create_read_token)"
-  sed -i "" "s/GRAFANA_READ_TOKEN=.*/GRAFANA_READ_TOKEN=$grafana_token/" "$PWD/grafana/env.grafana"
+  sed -i "" "s/GRAFANA_READ_TOKEN=.*/GRAFANA_READ_TOKEN=$grafana_token/" "$PWD/grafana/grafana.env"
 }
 
 function wait_on_influx() {
