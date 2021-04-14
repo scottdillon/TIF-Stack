@@ -89,12 +89,13 @@ function get_influxdb_bucket() {
 
 function create_write_token() {
   # use this function with a parameter which is the bucket id
-  local token="$(cmd influx auth create --write-bucket "$1" | grep "$INFLUX_USERNAME" | awk '{print $2}')"
+  local token="$(cmd influx auth create --write-bucket "$1" -d "Telegraf write token" | grep "$INFLUX_USERNAME" | awk -F $'\t' '{print $3}')"
   echo "$token"
 }
 
 function create_read_token() {
   local token="$(cmd influx auth create \
+    -d "Grafana read token" \
     --read-buckets \
     --read-checks \
     --read-dashboards \
@@ -104,7 +105,7 @@ function create_read_token() {
     --read-orgs \
     --read-tasks \
     --read-telegrafs \
-    --read-user | grep "$INFLUX_USERNAME" | awk '{print $2}')"
+    --read-user | grep "$INFLUX_USERNAME" | awk -F $'\t' '{print $3}')"
   echo "$token"
 }
 
