@@ -3,3 +3,4 @@ chronograf
 venv
 telegraf/telegraf_configs
 *.env
+root.crt
