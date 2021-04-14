@@ -2,4 +2,4 @@
 chronograf
 venv
 telegraf/telegraf_configs
-env.*
+*.env
