@@ -23,12 +23,6 @@ function _dc {
   docker-compose "${DC}" ${TTY} "${@}"
 }
 
-function _build_run_down {
-  docker-compose build
-  docker-compose run ${TTY} "${@}"
-  docker-compose down
-}
-
 # -----------------------------------------------------------------------------
 
 function cmd {
