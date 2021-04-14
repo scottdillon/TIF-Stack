@@ -46,6 +46,8 @@ function up {
 }
 
 function influx_setup {
+  . .env
+  . ./influxdb/env.influxdb
   # Sets up influxdb.
   wait_on_influx
 
@@ -101,15 +103,28 @@ function create_read_token {
 }
 
 function wipe_telegraf {
-  container_name=telegraf
+  local container_name="telegraf"
   docker-compose stop telegraf
   if [ "$(docker ps -q -f name="$container_name")" ]; then
-    docker rm $container_name
+    docker rm "$container_name"
   fi
 }
 
 function run_telegraf {
-  docker-compose run -d telegraf
+  docker-compose run -d --service-ports telegraf
+  docker-compose run -d --service-ports grafana
+}
+
+function start_over {
+  docker-compose down
+  docker volume rm influxdb2-data
+  docker volume rm grafana-data
+  docker volume rm metrics-caddy-data
+  docker volume rm metrics-caddy-config
+  docker volume create influxdb2-data
+  docker volume create grafana-data
+  docker volume create metrics-caddy-data
+  docker volume create metrics-caddy-config
 }
 
 function help {
