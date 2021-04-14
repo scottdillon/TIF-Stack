@@ -1,4 +1,4 @@
-metrics.hexatech.lan {
+metrics.local.lan {
     tls internal
     log {
         output file /var/log/caddy/ctrl_access.log
@@ -8,7 +8,7 @@ metrics.hexatech.lan {
 }
 
 
-influx.hexatech.lan {
+influx.local.lan {
     tls internal
     log {
         output file /var/log/caddy/ctrl_access.log
