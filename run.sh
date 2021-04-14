@@ -32,17 +32,17 @@ function _build_run_down {
 # -----------------------------------------------------------------------------
 
 function cmd {
-  # Run any command you want in the web container
+  # Run any command you want in the influx container
   _dc influxdb "${@}"
 }
 
 function up() {
   echo "Raising docker containers..."
-  docker-compose up -d
+  _dc up -d influxdb
   echo "Setting up influx..."
   influx_setup
-  echo "Running Telegraf..."
-  run_telegraf
+  echo "Running Telegraf and Grafana containers..."
+  _dc up -d telegraf grafana
 }
 
 function influx_setup() {
@@ -82,12 +82,12 @@ function get_influxdb_bucket {
 
 function create_write_token() {
   # use this function with a parameter which is the bucket id
-  local token="$(docker-compose exec influxdb influx auth create --write-bucket "$1" | grep "$INFLUX_USERNAME" | awk '{print $2}')"
+  local token="$(cmd influx auth create --write-bucket "$1" | grep "$INFLUX_USERNAME" | awk '{print $2}')"
   echo "$token"
 }
 
 function create_read_token() {
-  local token="$(docker-compose exec influxdb influx auth create \
+  local token="$(cmd influx auth create \
     --read-buckets \
     --read-checks \
     --read-dashboards \
