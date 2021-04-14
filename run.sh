@@ -83,6 +83,9 @@ function create_admin_config() {
   local admin_token="$(cmd influx auth list | grep $INFLUX_USERNAME | awk -F $'\t' '{print $3}')"
   cmd influx config create --config-name administrator --host-url "$INFLUX_HOST" --org "$INFLUX_ORG" --token "$admin_token" --active
 }
+
+function get_influxdb_bucket() {
+  local bucket_id="$(cmd influx bucket list | grep $INFLUX_BUCKET | awk '{print $1}')"
   echo "$bucket_id"
 }
 
