@@ -58,6 +58,9 @@ function influx_setup() {
     -b "$INFLUX_BUCKET" \
     -r "$INFLUX_RETENTION" \
     -f
+  # Create admin config
+  create_admin_config
+
   # Create write token
   bucket_id="$(get_influxdb_bucket)"
   telegraf_token="$(create_write_token $bucket_id)"
@@ -75,8 +78,10 @@ function wait_on_influx() {
   done
 }
 
-function get_influxdb_bucket {
-  local bucket_id="$(docker-compose exec influxdb influx bucket list | grep $INFLUX_BUCKET | awk '{print $1}')"
+function create_admin_config() {
+  local admin_token="$(cmd influx auth list | grep $INFLUX_USERNAME | awk -F $'\t' '{print $3}')"
+  cmd influx config create --config-name administrator --host-url "$INFLUX_HOST" --org "$INFLUX_ORG" --token "$admin_token" --active
+}
   echo "$bucket_id"
 }
 
