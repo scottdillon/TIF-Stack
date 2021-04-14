@@ -47,8 +47,12 @@ function up() {
 
 function influx_setup() {
   . .env
-  . ./influxdb/env.influxdb
-  # Sets up influxdb.
+  . ./influxdb/influxdb.env
+  . ./grafana/grafana.env
+  . ./telegraf/telegraf.env
+
+  # The influx db is not ready immediately, wait until health
+  # checks are good and then run the setup
   wait_on_influx
 
   cmd influx setup \
