@@ -25,3 +25,7 @@ Notice that the compose file is mounting some local folders in order to have per
 ## Telegraf Plugins
 
 [More info on telegraf plugins](https://github.com/influxdata/telegraf/tree/master/plugins)
+
+## Grafana Datasource Provisioning
+
+An example YAML file for InfluxDB 2.0 can be found on the [grafana datasource docs](https://grafana.com/docs/grafana/latest/datasources/influxdb/#influxdb-2x-for-flux-example)
