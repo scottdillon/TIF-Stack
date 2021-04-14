@@ -51,8 +51,6 @@ function influx_setup() {
   . ./grafana/grafana.env
   . ./telegraf/telegraf.env
 
-  # The influx db is not ready immediately, wait until health
-  # checks are good and then run the setup
   wait_on_influx
 
   cmd influx setup \
@@ -77,6 +75,8 @@ function influx_setup() {
 }
 
 function wait_on_influx() {
+  # The influx db is not ready immediately, wait until health
+  # checks are good and then run the setup
   until cmd influx ping > /dev/null 2>&1; do
   >&2 echo "InfluxDB not ready yet - sleeping"
   sleep 1
