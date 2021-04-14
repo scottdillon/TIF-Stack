@@ -36,7 +36,7 @@ function cmd {
   _dc influxdb "${@}"
 }
 
-function up {
+function up() {
   echo "Raising docker containers..."
   docker-compose up -d
   echo "Setting up influx..."
@@ -45,7 +45,7 @@ function up {
   run_telegraf
 }
 
-function influx_setup {
+function influx_setup() {
   . .env
   . ./influxdb/env.influxdb
   # Sets up influxdb.
@@ -69,8 +69,7 @@ function influx_setup {
   sed -i "" "s/GRAFANA_READ_TOKEN=.*/GRAFANA_READ_TOKEN=$grafana_token/" "$PWD/grafana/env.grafana"
 }
 
-function wait_on_influx {
-  until cmd influx ping; do
+function wait_on_influx() {
   >&2 echo "InfluxDB not ready yet - sleeping"
   sleep 1
   done
@@ -81,13 +80,13 @@ function get_influxdb_bucket {
   echo "$bucket_id"
 }
 
-function create_write_token {
+function create_write_token() {
   # use this function with a parameter which is the bucket id
   local token="$(docker-compose exec influxdb influx auth create --write-bucket "$1" | grep "$INFLUX_USERNAME" | awk '{print $2}')"
   echo "$token"
 }
 
-function create_read_token {
+function create_read_token() {
   local token="$(docker-compose exec influxdb influx auth create \
     --read-buckets \
     --read-checks \
@@ -102,7 +101,7 @@ function create_read_token {
   echo "$token"
 }
 
-function wipe_telegraf {
+function wipe_telegraf() {
   local container_name="telegraf"
   docker-compose stop telegraf
   if [ "$(docker ps -q -f name="$container_name")" ]; then
@@ -127,7 +126,7 @@ function start_over {
   docker volume create metrics-caddy-config
 }
 
-function help {
+function help() {
   printf "%s <task> [args]\n\nTasks:\n" "${0}"
 
   compgen -A function | grep -v "^_" | cat -n
