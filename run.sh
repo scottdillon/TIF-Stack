@@ -2,6 +2,7 @@
 
 # This file inspired by this piece of art at
 # https://github.com/nickjj/docker-django-example#run
+# and when I say inspired, I mean large chunks were copied.
 
 set -euo pipefail
 
@@ -37,7 +38,7 @@ function up() {
   influx_setup
   echo "Running Telegraf and Grafana containers..."
   docker-compose up -d telegraf grafana caddy
-  docker cp metrics_caddy_1:/data/caddy/pki/authorities/local/root.crt ./caddy
+  docker cp metrics-caddy:/data/caddy/pki/authorities/local/root.crt ./caddy
 }
 
 function influx_setup() {
@@ -111,7 +112,7 @@ function create_read_token() {
 }
 
 function wipe_telegraf() {
-  local container_name="telegraf"
+  local container_name="metrics-telegraf"
   docker-compose stop telegraf
   if [ "$(docker ps -q -f name="$container_name")" ]; then
     docker rm "$container_name"
