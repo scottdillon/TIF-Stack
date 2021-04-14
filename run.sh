@@ -36,7 +36,8 @@ function up() {
   echo "Setting up influx..."
   influx_setup
   echo "Running Telegraf and Grafana containers..."
-  docker-compose up -d telegraf grafana
+  docker-compose up -d telegraf grafana caddy
+  docker cp metrics_caddy_1:/data/caddy/pki/authorities/local/root.crt ./caddy
 }
 
 function influx_setup() {
