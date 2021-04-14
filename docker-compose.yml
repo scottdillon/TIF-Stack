@@ -7,6 +7,7 @@ services:
         - 3000:3000
         env_file:
           - './grafana/env.grafana'
+          - './env.common'
         volumes:
             - grafana-data:/var/lib/grafana
             - ./grafana/logs:/var/log/grafana
@@ -21,6 +22,7 @@ services:
         - 8086:8086
         env_file:
             - './influxdb/env.influxdb'
+            - './env.common'
         volumes:
             - type: "volume"
               source: influxdb2-data
@@ -36,6 +38,7 @@ services:
           - telegraf
         env_file:
             - './telegraf/env.telegraf'
+            - './env.common'
         environment:
             HOST_PROC: /rootfs/proc
             HOST_SYS: /rootfs/sys
