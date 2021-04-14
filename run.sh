@@ -118,21 +118,15 @@ function wipe_telegraf() {
   fi
 }
 
-function run_telegraf {
-  docker-compose run -d --service-ports telegraf
-  docker-compose run -d --service-ports grafana
-}
-
-function start_over {
+function start_over() {
+  # Delete all containers and reset volumes
   docker-compose down
-  docker volume rm influxdb2-data
-  docker volume rm grafana-data
-  docker volume rm metrics-caddy-data
-  docker volume rm metrics-caddy-config
-  docker volume create influxdb2-data
-  docker volume create grafana-data
-  docker volume create metrics-caddy-data
-  docker volume create metrics-caddy-config
+  volumes=("influxdb2-data" "grafana-data" "metrics-caddy-data" "metrics-caddy-config")
+  for i in "${volumes[@]}"
+  do
+    docker volume rm "$i"
+    docker volume create "$i"
+  done
 }
 
 function help() {
