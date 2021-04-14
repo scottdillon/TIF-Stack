@@ -1,32 +1,39 @@
 version: "3"
 services:
+
+    influxdb:
+        container_name: influxdb
+        image: influxdb:2.0.4
+        restart: always
+        ports:
+        - 8086:8086
+        env_file:
+            - './influxdb/env.influxdb'
+            - './.env'
+        volumes:
+            - type: "volume"
+              source: influxdb2-data
+              target: /root/.influxdbv2
+
     grafana:
         container_name: grafana
         image: grafana/grafana:7.5.3
-        ports:
-        - 3000:3000
+        restart: always
+        depends_on:
+          - influxdb
+        profiles:
+          - post_influx
         env_file:
           - './grafana/env.grafana'
-          - './env.common'
+          - './.env'
+        ports:
+        - 3000:3000
         volumes:
             - grafana-data:/var/lib/grafana
             - ./grafana/logs:/var/log/grafana
             - ./grafana/plugins:/var/lib/grafana/plugins
             - ./grafana/grafana.ini:/etc/grafana/grafana.ini
-            - ./grafana/datasources/influxdb.yml:/usr/share/grafana/conf/provisioning/datasources/influxdb.yml
-
-    influxdb:
-        container_name: influxdb
-        image: influxdb:2.0.4
-        ports:
-        - 8086:8086
-        env_file:
-            - './influxdb/env.influxdb'
-            - './env.common'
-        volumes:
-            - type: "volume"
-              source: influxdb2-data
-              target: /root/.influxdbv2
+            - ./grafana/datasources/influxdb.yml:/etc/grafana/provisioning/datasources/influxdb.yml
 
     telegraf:
         container_name: telegraf
@@ -35,10 +42,10 @@ services:
         depends_on:
           - influxdb
         profiles:
-          - telegraf
+          - post_influx
         env_file:
             - './telegraf/env.telegraf'
-            - './env.common'
+            - './.env'
         environment:
             HOST_PROC: /rootfs/proc
             HOST_SYS: /rootfs/sys
