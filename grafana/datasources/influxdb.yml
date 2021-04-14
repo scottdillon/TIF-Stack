@@ -1,0 +1,16 @@
+apiVersion: 1
+
+datasources:
+  - name: InfluxDB
+    type: influxdb
+    access: proxy
+    url: $INFLUX_HOST
+    isDefault: true
+    editable: false
+    secureJsonData:
+      token: $GRAFANA_READ_TOKEN
+    jsonData:
+      version: Flux
+      organization: $INFLUX_ORG
+      defaultBucket: $INFLUX_BUCKET
+      tlsSkipVerify: true

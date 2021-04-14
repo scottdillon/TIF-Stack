@@ -12,6 +12,7 @@ services:
             - ./grafana/logs:/var/log/grafana
             - ./grafana/plugins:/var/lib/grafana/plugins
             - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+            - ./grafana/datasources/influxdb.yml:/usr/share/grafana/conf/provisioning/datasources/influxdb.yml
 
     influxdb:
         container_name: influxdb
