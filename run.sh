@@ -127,6 +127,7 @@ function start_over() {
     docker volume rm "$i"
     docker volume create "$i"
   done
+  rm ./caddy/root.crt
 }
 
 function help() {
