@@ -32,11 +32,11 @@ function cmd {
 
 function up() {
   echo "Raising docker containers..."
-  _dc up -d influxdb
+  docker-compose up -d influxdb
   echo "Setting up influx..."
   influx_setup
   echo "Running Telegraf and Grafana containers..."
-  _dc up -d telegraf grafana
+  docker-compose up -d telegraf grafana
 }
 
 function influx_setup() {
