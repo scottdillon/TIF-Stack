@@ -121,13 +121,12 @@ function wipe_telegraf() {
 function start_over() {
   # Delete all containers and reset volumes
   docker-compose down
-  volumes=("influxdb2-data" "grafana-data" "metrics-caddy-data" "metrics-caddy-config")
+  volumes=("influxdb2-data" "grafana-data")
   for i in "${volumes[@]}"
   do
     docker volume rm "$i"
     docker volume create "$i"
   done
-  rm ./caddy/root.crt
 }
 
 function help() {
