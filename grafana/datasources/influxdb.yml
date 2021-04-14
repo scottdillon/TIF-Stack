@@ -3,7 +3,6 @@ apiVersion: 1
 datasources:
   - name: InfluxDB
     type: influxdb
-    access: proxy
     url: $INFLUX_HOST
     isDefault: true
     editable: false
