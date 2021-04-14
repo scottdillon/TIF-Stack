@@ -73,6 +73,7 @@ function influx_setup() {
 }
 
 function wait_on_influx() {
+  until cmd influx ping > /dev/null 2>&1; do
   >&2 echo "InfluxDB not ready yet - sleeping"
   sleep 1
   done
