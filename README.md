@@ -1,6 +1,6 @@
 # Influxdb / Telegraf / Grafana metrics
 
-This repo was cloned from Ruben Sanchez's [metrics-stack](https://github.com/rubenwap/metrics-stack) repo but I found that it didn't fit my needs. I needed a quick way to set up a TIF stack and I wanted to do *ZERO* configuration afterwards. I got tired of setting up email alerting only to find that I needed to tear down the stack again.
+This repo was cloned from Ruben Sanchez's [metrics-stack](https://github.com/rubenwap/metrics-stack) repo but I found that it didn't work with newer versions of the TIF stack and didn't fit my needs. I needed a quick way to set up a TIF stack and I wanted to do *ZERO* configuration afterwards. I got tired of setting up email alerting only to find that I needed to tear down the stack again.
 
 This repo allows the user to spin up a Telegraf/InfluxDB/Grafana stack very easily.
 
