@@ -24,7 +24,6 @@ services:
             - type: "volume"
               source: influxdb2-data
               target: /root/.influxdbv2
-            - ./scripts/influx_startup.sh:/influx_startup.sh:ro
 
     telegraf:
         container_name: telegraf
