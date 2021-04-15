@@ -35,6 +35,7 @@ function cmd {
 }
 
 function up() {
+  check_volumes
   echo "Raising docker containers..."
   docker-compose up -d influxdb
   echo "Setting up influx..."
@@ -42,6 +43,16 @@ function up() {
   echo "Running Telegraf and Grafana containers..."
   docker-compose up -d telegraf grafana caddy
   docker cp metrics-caddy:/data/caddy/pki/authorities/local/root.crt ./caddy
+}
+
+function check_volumes() {
+  for i in "${volumes[@]}"
+  do
+    docker volume inspect "$i" > /dev/null 2>&1
+    if [ $? != 0 ]; then
+      docker volume create "$i"
+    fi
+  done
 }
 
 function influx_setup() {
