@@ -16,6 +16,9 @@ if [[ ! -t 1 ]]; then
   TTY="-T"
 fi
 
+# Volume names required for this repo.
+volumes=("influxdb2-data" "grafana-data" "metrics-caddy-data" "metrics-caddy-config")
+
 # -----------------------------------------------------------------------------
 # Helper functions start with _ and aren't listed in this script's help menu.
 # -----------------------------------------------------------------------------
@@ -121,9 +124,9 @@ function wipe_telegraf() {
 
 function start_over() {
   # Delete all containers and reset volumes
+  # but DO NOT DELETE the caddy volumes!
   docker-compose down
-  volumes=("influxdb2-data" "grafana-data")
-  for i in "${volumes[@]}"
+  for i in "${volumes[@]:0:2}"
   do
     docker volume rm "$i"
     docker volume create "$i"
