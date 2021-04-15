@@ -77,12 +77,22 @@ function influx_setup() {
   # Create write token
   bucket_id="$(get_influxdb_bucket)"
   telegraf_token="$(create_write_token $bucket_id)"
-  token_placeholder="TELEGRAF_WRITE_TOKEN=.*"
-  sed -i "" "s/TELEGRAF_WRITE_TOKEN=.*/TELEGRAF_WRITE_TOKEN=$telegraf_token/" "$PWD/telegraf/telegraf.env"
+  sed_replacement 'TELEGRAF_WRITE_TOKEN=.*' "TELEGRAF_WRITE_TOKEN=$telegraf_token" '/telegraf/telegraf.env'
 
   # Create read token
   grafana_token="$(create_read_token)"
-  sed -i "" "s/GRAFANA_READ_TOKEN=.*/GRAFANA_READ_TOKEN=$grafana_token/" "$PWD/grafana/grafana.env"
+  sed_replacement 'GRAFANA_READ_TOKEN=.*' "GRAFANA_READ_TOKEN=$grafana_token" '/grafana/grafana.env'
+}
+
+function sed_replacement() {
+  local blank_token_text="$1"
+  local full_token_text="$2"
+  local file="$3"
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    sed -i '' "s/$blank_token_text/$full_token_text/" "$PWD/$file"
+  else
+    sed -i "s/$blank_token_text/$full_token_text/" "$PWD/$file"
+  fi
 }
 
 function wait_on_influx() {
