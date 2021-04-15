@@ -14,17 +14,17 @@ This repo allows the user to spin up a Telegraf/InfluxDB/Grafana stack very easi
 First, you're going to need docker and docker-compose. Install them if you haven't already and then come back to this point. Then, find the example environment files and rename them. Then, fill them in with your desired values.
 
 - **.env**
-    - You'll want to fill in the INFLUX_ORG AND INFLUX_BUCKET.
+    - You'll want to fill in the `INFLUX_ORG` AND `INFLUX_BUCKET`.
 - **telegraf.env**
-    - Ignore the TELEGRAF_WRITE_TOKEN. It will be filled in automatically.
-    - Fill in the PG_HOST, PG_PORT, PG_USER, PGPASSWORD, PG_DATABASE with your postgresql host, port and credentials.
-    - PG_OUTPUT_ADDRESS is a tag that is attached to the data collected.
+    - Ignore the `TELEGRAF_WRITE_TOKEN`. It will be filled in automatically.
+    - Fill in the `PG_HOST`, `PG_PORT`, `PG_USER`, `PGPASSWORD`, `PG_DATABASE` with your postgresql host, port and credentials.
+    - `PG_OUTPUT_ADDRESS` is a tag that is attached to the data collected.
 - **influxdb.env**
-    - Fill in the INFLUX_USERNAME and INFLUX_PASSWORD. These will be your login credentials to the influxDB instance.
+    - Fill in the `INFLUX_USERNAME` and `INFLUX_PASSWORD`. These will be your login credentials to the influxDB instance.
 - **grafana.env**
-    - Ignore the GRAFANA_READ_TOKEN. It will be filled in automatically.
-    - Fill in the GF_SECURITY_ADMIN_USER and GF_SECURITY_ADMIN_PASSWORD. These will be your admin credentials to the grafana instance.
-    - Fill in the GF_SMTP_* entries if you wish to have email alerting set up by default.
+    - Ignore the `GRAFANA_READ_TOKEN`. It will be filled in automatically.
+    - Fill in the `GF_SECURITY_ADMIN_USER` and `GF_SECURITY_ADMIN_PASSWORD`. These will be your admin credentials to the grafana instance.
+    - Fill in the `GF_SMTP_*` entries if you wish to have email alerting set up by default.
 
 Run `./run.sh up` and the containers will be spun up and configured.
 
