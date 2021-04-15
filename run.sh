@@ -47,12 +47,13 @@ function up() {
 
 function check_volumes() {
   for i in "${volumes[@]}"
-  do
-    docker volume inspect "$i" > /dev/null 2>&1
-    if [ $? != 0 ]; then
-      docker volume create "$i"
-    fi
-  done
+    do
+      local vol_name=$(docker volume ls | grep "$i" | awk -F $' +' '{print $2}')
+      if [ "$vol_name" == '' ]; then
+        echo "Creating $i volume"
+        docker volume create "$i" > /dev/null 2>&1
+      fi
+    done
 }
 
 function influx_setup() {
