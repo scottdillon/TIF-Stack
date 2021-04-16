@@ -8,7 +8,8 @@ This repo allows the user to spin up a Telegraf/InfluxDB/Grafana stack very easi
 - Grafana and Telegraf connect with no further setup.
 - Email alerting is set up in Grafana if desired.
 - Telegraf collects data from a Postgresql database if environment variables are filled in.
-- HTTPS is automatically enabled via [Caddy](https://caddyserver.com/)
+- HTTPS is automatically enabled via [Caddy](https://caddyserver.com/).
+- Includes [separate image rendering container](https://github.com/grafana/grafana-image-renderer/blob/master/docs/remote_rendering_using_docker.md) for external rendering.
 
 ## Getting Started
 First, you're going to need docker and docker-compose. Install them if you haven't already and then come back to this point. Then, find the example environment files and rename them. Then, fill them in with your desired values.
@@ -31,9 +32,9 @@ Run `./run.sh up` and the containers will be spun up and configured.
 Now, if you go to http://localhost:3000 you'll see your grafana instance. InfluxDB is at http://localhost:8086. You should be able to log in with the credentials you specified in the `grafana.env` and `influxdb.env` files respectively.
 
 ## HTTPS
-Configure your DNS server (I use a [pihole](https://pi-hole.net/) at home and at my job) to serve your ip address for `metrics.local.lan` and `influx.local.lan` domains. If you don't have a DNS server, make entries in your HOSTS file to serve localhost for `influx.local.lan` and `metrics.local.lan`.
+Configure your DNS server (I use a [pihole](https://pi-hole.net/)) to serve your ip address for `metrics.local.lan` and `influx.local.lan` domains. If you don't have a DNS server, make entries in your HOSTS file to serve localhost for `influx.local.lan` and `metrics.local.lan`.
 
-Now go to `https://metrics.local.lan` and you should see the warning page because your browser does not trust the internal Caddy CA. The root certificate caddy uses is extracted to `./caddy/root.crt`. Load this into keychain on a mac and you're good to go.
+Now go to `https://metrics.local.lan` and you should see the warning page because your browser does not trust the internal Caddy CA. The root certificate caddy uses is extracted to `./caddy/root.crt`. [Load this into keychain on a mac](https://apple.stackexchange.com/questions/80623/import-certificates-into-the-system-keychain-via-the-command-line) and you're good to go. [For Windows.](https://support.securly.com/hc/en-us/articles/360026808753-How-to-manually-install-the-Securly-SSL-certificate-on-Windows) I am not able to test the windows method but it looks right. [For Linux.](https://superuser.com/a/719047)
 
 If you're hesitant to trust the root.crt created by caddy, know that it is only good for pages served by this instance of Caddy itself. It won't be any good anywhere else.
 
@@ -63,6 +64,8 @@ run cmd influx bucket list
 - `wipe_telegraph` - If you need to configure telegraph and rebuild the container, use this followed by `docker-compose up -d`
 
 ## Telegraf Plugins
+
+If you add a new telegraf instance somewhere, by default it will have an InfluxDB < 2.0 data output enabled. Be sure to turn this off by commenting it out at the top of the telegraf.conf file.
 
 [More info on telegraf plugins](https://github.com/influxdata/telegraf/tree/master/plugins)
 
