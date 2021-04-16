@@ -6,7 +6,7 @@ services:
         image: influxdb:2.0.4
         restart: always
         ports:
-        - 8086:8086
+          - 8086:8086
         env_file:
             - './influxdb/influxdb.env'
             - './.env'
@@ -25,13 +25,13 @@ services:
           - './grafana/grafana.env'
           - './.env'
         ports:
-        - 3000:3000
+          - 3000:3000
         volumes:
-            - grafana-data:/var/lib/grafana
-            - ./grafana/logs:/var/log/grafana
-            - ./grafana/plugins:/var/lib/grafana/plugins
-            - ./grafana/grafana.ini:/etc/grafana/grafana.ini
-            - ./grafana/datasources/influxdb.yml:/etc/grafana/provisioning/datasources/influxdb.yml
+          - grafana-data:/var/lib/grafana
+          - ./grafana/logs:/var/log/grafana
+          - ./grafana/plugins:/var/lib/grafana/plugins
+          - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+          - ./grafana/datasources/influxdb.yml:/etc/grafana/provisioning/datasources/influxdb.yml
 
     telegraf:
         container_name: metrics-telegraf
@@ -40,18 +40,18 @@ services:
         depends_on:
           - influxdb
         env_file:
-            - './telegraf/telegraf.env'
-            - './.env'
+          - './telegraf/telegraf.env'
+          - './.env'
         environment:
             HOST_PROC: /rootfs/proc
             HOST_SYS: /rootfs/sys
             HOST_ETC: /rootfs/etc
         volumes:
-            - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
-            - /var/run/docker.sock:/var/run/docker.sock:ro
-            - /sys:/rootfs/sys:ro
-            - /proc:/rootfs/proc:ro
-            - /etc:/rootfs/etc:ro
+          - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+          - /var/run/docker.sock:/var/run/docker.sock:ro
+          - /sys:/rootfs/sys:ro
+          - /proc:/rootfs/proc:ro
+          - /etc:/rootfs/etc:ro
 
     caddy:
         container_name: metrics-caddy
