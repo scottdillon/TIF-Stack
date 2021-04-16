@@ -65,6 +65,8 @@ run cmd influx bucket list
 
 ## Telegraf Plugins
 
+[Telegraf installation instructions](https://docs.influxdata.com/telegraf/v1.18/introduction/installation/)
+
 If you add a new telegraf instance somewhere, by default it will have an InfluxDB < 2.0 data output enabled. Be sure to turn this off by commenting it out at the top of the telegraf.conf file.
 
 [More info on telegraf plugins](https://github.com/influxdata/telegraf/tree/master/plugins)
