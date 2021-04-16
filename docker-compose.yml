@@ -26,12 +26,25 @@ services:
           - './.env'
         ports:
           - 3000:3000
+        environment:
+          GF_RENDERING_SERVER_URL: http://renderer:8081/render
+          GF_RENDERING_CALLBACK_URL: http://grafana:3000/
+          GF_LOG_FILTERS: rendering:debug
         volumes:
           - grafana-data:/var/lib/grafana
           - ./grafana/logs:/var/log/grafana
           - ./grafana/plugins:/var/lib/grafana/plugins
           - ./grafana/grafana.ini:/etc/grafana/grafana.ini
           - ./grafana/datasources/influxdb.yml:/etc/grafana/provisioning/datasources/influxdb.yml
+
+    renderer:
+        container_name: metrics-renderer
+        image: grafana/grafana-image-renderer:2.0.1
+        restart: always
+        ports:
+          - 8081
+        environment:
+          BROWSER_TZ: America/New_York
 
     telegraf:
         container_name: metrics-telegraf
