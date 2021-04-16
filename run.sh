@@ -19,6 +19,7 @@ fi
 # Volume names required for this repo.
 volumes=("influxdb2-data" "grafana-data" "metrics-caddy-data" "metrics-caddy-config")
 
+post_influx_services=("telegraf" "grafana" "caddy" "renderer")
 # -----------------------------------------------------------------------------
 # Helper functions start with _ and aren't listed in this script's help menu.
 # -----------------------------------------------------------------------------
@@ -41,12 +42,12 @@ function up() {
   echo "Setting up influx..."
   influx_setup
   echo "Running Telegraf and Grafana containers..."
-  docker-compose up -d telegraf grafana caddy renderer
+  docker-compose up -d ${post_influx_services[@]}
   docker cp metrics-caddy:/data/caddy/pki/authorities/local/root.crt ./caddy
 }
 
 function check_volumes() {
-  for i in "${volumes[@]}"
+  for i in ${volumes[@]}
     do
       local vol_name=$(docker volume ls | grep "$i" | awk -F $' +' '{print $2}')
       if [ "$vol_name" == '' ]; then
