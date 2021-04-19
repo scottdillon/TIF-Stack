@@ -61,7 +61,7 @@ do this
 run cmd influx bucket list
 ```
 
-- `start_over` - DANGER! This command will wipe your grafana and influx container volumes. Use this to start over and set the project up again.
+- `start_over` - DANGER! This command will wipe your grafana and influx container volumes. Use this to start over and set the project up again. Note that it will NOT delete your Caddy data volume so you will not need to reload the root.crt file into your local trusted CA.
 
 - `wipe_telegraph` - If you need to configure telegraph and rebuild the container, use this followed by `docker-compose up -d`
 
