@@ -21,6 +21,7 @@ First, you're going to need docker and docker-compose. Install them if you haven
     - Fill in the `PG_HOST`, `PG_PORT`, `PG_USER`, `PGPASSWORD`, `PG_DATABASE` with your postgresql host, port and credentials.
     - `PG_OUTPUT_ADDRESS` is a tag that is attached to the data collected.
     - Fill in the `TELEGRAF_HOST` variable. This will be added as a tag on all the data from the host where it's running. If running telegraf on multiple hosts, you can use this to filter out telegraf data.
+    - If you'd like to add any additional global tags, you can use the commented out example under the `[global_tags]` header.
 - **influxdb.env**
     - Fill in the `INFLUX_USERNAME` and `INFLUX_PASSWORD`. These will be your login credentials to the influxDB instance.
 - **grafana.env**
